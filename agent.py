@@ -2,6 +2,7 @@ import os
 import asyncio
 import pandas as pd
 import ollama 
+from pandas import DataFrame
 from dotenv import load_dotenv
 from telegram import Bot
 
@@ -14,16 +15,16 @@ url = os.getenv('URL')
 bot = Bot(token=TOKEN)
 
 
-system_prompt = 'You are an assistant that analyzes the prices of a product \
+system_prompt: str = 'You are an assistant that analyzes the prices of a product \
     and make a prediction about the likely price trend in the coming days based on the data.'
 
-df = pd.read_csv('prices.csv')
+df: DataFrame = pd.read_csv('prices.csv')
 
-def user_prompt_for(df):
-    latest_data = df.tail(10)
-    product_name = latest_data['product_name'].iloc[-1]
-    price_history = latest_data[['timestamp', 'old_price', 'new_price', 'installment_price']].to_string(index=False)
-    user_prompt = f'''
+def user_prompt_for(df: DataFrame) -> str:
+    latest_data: DataFrame = df.tail(10)
+    product_name: str = latest_data['product_name'].iloc[-1]
+    price_history: str = latest_data[['timestamp', 'old_price', 'new_price', 'installment_price']].to_string(index=False)
+    user_prompt: str = f'''
 The following table shows the price history of {product_name} over the last few days:
 {price_history}
 
@@ -48,24 +49,24 @@ Make sure your answer follows this structure:
     
     return user_prompt
 
-def messages_for(df):
+def messages_for(df: DataFrame) -> list[dict[str, str]]:
     return [
         {'role': 'system', 'content': system_prompt},
         {'role': 'user', 'content': user_prompt_for(df)}
     ]
 
-def analyze_prices(df):
+def analyze_prices(df: DataFrame) -> str:
     messages = messages_for(df)
     responses = ollama.chat(model=MODEL, messages=messages)
     result = responses['message']['content']
 
     return result
 
-async def send_telegram_message(text):
+async def send_telegram_message(text: str) -> None:
     await bot.send_message(chat_id=CHAT_ID, text=text)
 
-async def main():
-    result = analyze_prices(df)
+async def main() -> None:
+    result: str = analyze_prices(df)
 
     if 'buy' in result.lower():
         await send_telegram_message(result)
