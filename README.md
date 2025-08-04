@@ -1,14 +1,13 @@
-# 🛒 AI-Powered Price Monitoring Agent
+# 🛒 Price Tracker
 
-This project is an **AI-powered agent** that monitors product prices from Mercado Livre, analyzes recent price trends using a **local LLM (Llama 3.2 but you can choose whatever model you want)**, and sends notifications to the user via **Telegram** when price drops are detected.
+This project is an application that **monitors** product prices from Mercado Livre, **analyzes** recent price trends and sends **notifications** to the user via **Telegram** when price drops are detected.
 
 ---
 
 ## 🚀 Features
 
-- 🔍 **Web Scraping**: Automatically fetches product name and price data (current, old, and installment) from a product page.
-- 📊 **Data Logging**: Saves extracted product data with timestamps into a `.csv` file for historical tracking.
-- 🧠 **AI Analysis**: Utilizes a **local Llama 3.2 model** (via Ollama) to analyze the last 10 price entries and provide insights.
+- 🔍 **Web Scraping**: Automatically fetches product name and price data from a product page.
+- 📊 **Data Logging**: Saves extracted product data with timestamps into Postgres database for historical tracking.
 - 📱 **Telegram Alerts**: Sends smart notifications to the user when price changes meet certain conditions (e.g., significant discount).
 
 ---
@@ -16,10 +15,12 @@ This project is an **AI-powered agent** that monitors product prices from Mercad
 ## 📦 Tech Stack
 
 - **Python 3.12**
-- **BeautifulSoup** (Web Scraping)
-- **Pandas** (Data handling)
-- **Ollama** (LLM interface, Llama 3.2 model)
+- **Fast API**
+- **BeautifulSoup**
+- **PostgreSQL**
 - **Telegram Bot API**
+- **React**
+- **Tailwind**
 
 ---
 
@@ -28,34 +29,20 @@ This project is an **AI-powered agent** that monitors product prices from Mercad
 
 ## ⚙️ How It Works
 
-1. **scrap.py**:
-   - Scrapes product name and prices from a given URL every 2 minutes.
-   - Appends the data into `prices.csv`.
-
-2. **agent.py**:
-   - Loads the latest entries from the CSV file.
-   - Prompts **Llama 3** to analyze recent price trends.
-   - If the model recommends action (e.g., “You should buy now!”), sends a message to your Telegram.
+**coming soon**
 
 ---
 
-## 📥 Installation
+## 📥 Running Locally
 
-1. **Download Ollama**
-    You can get Ollama [here]('https://github.com/ollama/ollama')
 
-    Once you have installed Ollama, you need to pull a LLM/SLM model and run it.
-    ```ollama pull llama3.2 ``` & ```ollama run llama3.2```. 
-    
-    Make sure you have your model running ```ollama ps```
-
-2. **Clone the repository:**
+1. **Clone the repository:**
    ```
    git clone https://github.com/yourusername/price-monitoring-agent.git
    cd price-monitoring-agent
     ```
 
-3. **Create virtual environment and install dependencies**
+2. **Create virtual environment and install dependencies**
 
 To create the virtual environment, run ``` python -m venv .venv ```.
 
@@ -66,35 +53,33 @@ Then you need to activate it.
 
 Now you have to install the dependencies. Just run ```pip install -r requirements.txt```
 
-4. **Create .env file**
+4. **Set database url on .env file**
 
-You might have noticed the project has some data that is not being exposed, like TELEGRAM_CHAT_ID, which is my personal chat id.
-To use your personal data, create a file called .env just as it follows:
+You might have noticed the database url is not being exposed.
+To use your personal database url, create a file called .env just as it follows:
 
 ```
-URL=https://www.example.com/product-url
-TELEGRAM_TOKEN=your_telegram_bot_token
-TELEGRAM_CHAT_ID=your_chat_id
-MODEL=llama3
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres"
 ```
+
+You can configure the environments variables on the compose file. 
 
 5. **Running Project**
 
-To get price data, run ```python scrap.py```. If you want the price analyzes, run ```python agent.py```
+Just run ```uvicorn app.main:app --reload``` and access on http://localhost:8000/. 
+To read the documentation: http://localhost:8000/docs/.
 
 ## 📊 Sample Output
 
-![telegram_chat](assets/telegram_output.png)
+![telegram_chat](assets/telegram-output.png)
 
 ## 📌 Future Improvements
-- Add Dockerfile
+- Create Dockerfile 
 - Add price prediction using historical data.
-- Store data in a PostgreSQL instead of CSV.
 - Multi-product support.
 - Deployment in the Cloud (Don't know which one yet)
-- Once the project is deployed in a Cloud provider, I'll create a cronjob to run price analyzes.
 
 ## 🤖 Author
 Developed by Lucas Berenger — feel free to connect or reach out!
 
-v1.0.0
+v1.1.0
