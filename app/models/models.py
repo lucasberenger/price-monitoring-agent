@@ -9,13 +9,14 @@ class Product(SQLModel, table=True):
     product_name: str
     url: str
     current_price: float
-    old_price: float
+    first_price: float
     last_scraped_at: Optional[datetime] = None
     alert: Optional["Alert"] = Relationship(
         back_populates="product", 
         sa_relationship_kwargs={'uselist': False},
         cascade_delete=True
     )
+    discount_alerts: Optional["DiscountAlert"] = Relationship(back_populates="product", cascade_delete=True)
     price_history: list["PriceHistory"] = Relationship(back_populates="product", cascade_delete=True)
 
 class PriceHistory(SQLModel, table=True):
@@ -36,4 +37,15 @@ class Alert(SQLModel, table=True):
     target_price: float
     is_active: bool = True
     product: Optional[Product] = Relationship(back_populates="alert")
+
+class DiscountAlert(SQLModel, table=True):
+    __tablename__ = "discount_alerts"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    product_id: int = Field(foreign_key="products.id")
+    telegram_chat_id: str
+    discount_value: float 
+    sent_at: datetime = Field(default_factory=datetime.utcnow)
+
+    product: Optional["Product"] = Relationship(back_populates="discount_alerts")
     

@@ -27,14 +27,14 @@ def parse_page(html: str, url: str) -> dict:
     product_name: str = soup.find('h1', class_='ui-pdp-title').get_text()
     prices: list = soup.find_all('span', class_='andes-money-amount__fraction') 
     current_price: int = int(prices[1].get_text().replace('.', ''))
-    old_price: int = int(prices[0].get_text().replace('.', ''))
+    first_price: int = int(prices[0].get_text().replace('.', ''))
 
     
     data = {
         'product_name': product_name,
         'url': url,
         'current_price': float(current_price),
-        'old_price': float(old_price),
+        'first_price': float(first_price),
         'last_scraped_at': timestamp
     }
 
