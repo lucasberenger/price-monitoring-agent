@@ -1,12 +1,15 @@
 from bs4 import BeautifulSoup
 from sqlmodel import Session, create_engine, select
 from app.models.product_models import PriceHistory, Product
+from app.core.logger import setup_logger
 from dotenv import load_dotenv
 import os 
 import time
 import requests
 
 load_dotenv()
+
+logger = setup_logger(__name__)
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -66,6 +69,7 @@ def add_price_history(session: Session, product: Product):
     session.add(price_entry)
 
 def main():
+    logger.info("Scraping has been initialized")
     while True:
         products = get_all_products()
         with Session(engine) as session:
