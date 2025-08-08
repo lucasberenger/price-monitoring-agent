@@ -1,6 +1,6 @@
 from sqlmodel import Session, select
 from sqlalchemy.exc import NoResultFound
-from app.models.models import Product
+from app.models.product_models import Product
 
 def list_all_products(session: Session) -> list[Product]:
     statement = select(Product)

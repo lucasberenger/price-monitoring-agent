@@ -1,5 +1,5 @@
 from sqlmodel import Session
-from app.models.models import Alert
+from app.models.product_models import Alert
 
 def create_alert(session: Session, 
                  product_id: int, 

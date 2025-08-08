@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from .core.db import create_db_and_tables
-from .routers import products
+from app.core.db import create_db_and_tables
+from app.routers import products
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

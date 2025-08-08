@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from telegram import Bot
-from ..models.models import Product
+from app.models.product_models import Product
 import os 
 
 load_dotenv()

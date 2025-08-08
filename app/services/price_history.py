@@ -1,5 +1,5 @@
 from sqlmodel import Session
-from app.models.models import PriceHistory
+from app.models.product_models import PriceHistory
 from datetime import datetime
 
 

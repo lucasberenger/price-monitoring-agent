@@ -1,12 +1,12 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.exc import NoResultFound
-from ..models.models import Product
-from ..schemas.schemas import ProductRequest
-from ..scrapers.scraping import fetch_page, parse_page
-from ..services.product import list_all_products, list_product_by_id, add_product, delete_product
-from ..services.alert import create_alert
-from ..telegram.notifier import notify_product_added, notify_product_deleted
-from ..core.db import get_session
+from app.models.product_models import Product
+from app.schemas.schemas import ProductRequest
+from app.workers.scraping import fetch_page, parse_page
+from app.services.product import list_all_products, list_product_by_id, add_product, delete_product
+from app.services.alert import create_alert
+from app.telegram.notifier import notify_product_added, notify_product_deleted
+from app.core.db import get_session
 
 router = APIRouter()
 
